@@ -1,0 +1,24 @@
+SELECT LPAD(' ', 3 * level-3)||first_name , LEVEL, employee_id, manager_id, department_id
+FROM employees
+START WITH manager_id IS NULL
+CONNECT BY employee_id = PRIOR  manager_id;
+
+SELECT '*'||LPAD(' ', 3 * 3-3)||'*' from dual;
+
+COLUMN org_chart FORMAT A20
+SET PAGESIZE 200
+SELECT LPAD(' ', 3 * LEVEL-3)||first_name AS org_chart,
+LEVEL, employee_id, manager_id, department_id
+FROM employees
+START WITH manager_id IS NULL
+CONNECT BY PRIOR employee_id = manager_id;
+CLEAR COLUMN
+
+
+COLUMN nom FORMAT A25
+SELECT LPAD(first_name, length(first_name)+(3 * LEVEL-3),' ') AS nom,
+LEVEL, employee_id, manager_id, department_id
+FROM employees
+START WITH manager_id IS NULL
+CONNECT BY PRIOR employee_id = manager_id;
+CLEAR COLUMN

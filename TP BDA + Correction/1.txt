@@ -1,0 +1,25 @@
+Select E.employee_id, M.employee_id 
+from employees E, employees M
+where E.manager_id = M.employee_id;
+
+Select E.employee_id, M.employee_id 
+from employees E left outer join employees M
+on E.manager_id = M.employee_id;
+
+Select E.employee_id, M.employee_id 
+from employees E, employees M
+where E.manager_id = M.employee_id(+);
+
+Select E.employee_id, E.department_id, M.employee_id
+from employees E, employees M
+where E.manager_id = M.employee_id(+);
+
+Select E.employee_id, M.employee_id, E.department_id, D.department_name  
+from employees E, employees M, departments D
+where E.manager_id = M.employee_id(+)
+and E.department_id = D.department_id;
+
+Select E.employee_id, M.employee_id, E.department_id, D.department_name  
+from employees E, employees M, departments D
+where E.manager_id = M.employee_id(+)
+and E.department_id = D.department_id(+);

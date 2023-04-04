@@ -1,0 +1,73 @@
+create or replace function verify_dept(Pdept_id in departments.department_id%type)
+return boolean
+is
+nb_dept number;
+begin
+select count(*) into nb_dept from departments
+where department_id = Pdept_id;
+
+if nb_dept = 0 then
+return false;
+else 
+return true;
+end if; 
+end;
+/
+
+===================================================================================
+
+create or replace function nb_emp_dept(Pdept_id in departments.department_id%type)
+return number
+is
+nb_emp number;
+begin
+select count(*) into nb_emp from employees
+where department_id = Pdept_id;
+
+return nb_emp;
+end;
+/
+
+===================================================================================
+
+create or replace procedure aff_emp_dept (Pdept_id in departments.department_id%type)
+
+is
+cursor c_emp is select employee_id, first_name, last_name, salary
+                from employees
+                where department_id = Pdept_id;
+nb_dept number;
+nb_emp number;
+
+begin
+
+if not verify_dept(Pdept_id)  then
+dbms_output.put_line('Le departemebt n''existe pas');
+else
+if nb_emp_dept(Pdept_id) = 0 then
+dbms_output.put_line('Le departemet est vide');
+else
+for vc_emp in c_emp loop
+dbms_output.put_line(rpad(vc_emp.employee_id,4)||'  '||
+                     rpad(vc_emp.first_name,20)||'  '||
+                     rpad(vc_emp.last_name,20)||'  '||
+                     vc_emp.salary);
+end loop;
+end if;
+end if;
+end;
+/
+
+set serveroutput on
+
+execute aff_emp_dept(00)
+
+execute aff_emp_dept(270)
+
+execute aff_emp_dept(10)
+
+begin
+aff_emp_dept(10);
+end;
+/
+

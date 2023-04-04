@@ -1,0 +1,14 @@
+SELECT department_id,job_id,manager_id,SUM(salary), GROUPING(department_id), GROUPING(job_id), GROUPING(manager_id)
+FROM employees
+GROUP BY ROLLUP(department_id, (job_id,manager_id));
+
+
+column depart format A30
+column manager format A30
+SELECT 
+decode(GROUPING(department_id),1,'ALL',department_id) depart,
+decode(GROUPING(manager_id),1,'ALL',manager_id) manager, 
+SUM(salary)
+FROM employees
+GROUP BY ROLLUP(department_id, manager_id);
+clear column

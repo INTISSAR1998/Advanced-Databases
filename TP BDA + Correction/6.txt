@@ -1,0 +1,27 @@
+SELECT employee_id, salary, department_id
+FROM employees outer
+WHERE salary > (SELECT AVG(salary)
+FROM employees inner
+WHERE outer.department_id = inner.department_id);
+
+===============================================================
+
+with req as 
+(
+select department_id, AVG(salary) Moy
+from employees
+group by department_id
+)
+select employee_id, E.department_id, salary
+from employees E, req R
+where E.department_id = R.department_id
+and salary > Moy;
+=================================================================================
+SELECT employee_id, salary, department_id, (SELECT AVG(salary)
+                                            FROM employees inner
+                                            WHERE outer.department_id =                          
+                                            inner.department_id) as moy_sal
+FROM employees outer
+WHERE salary > (SELECT AVG(salary)
+                FROM employees inner
+                WHERE outer.department_id = inner.department_id);

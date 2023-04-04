@@ -1,0 +1,9 @@
+SELECT department_id, job_id, SUM(salary),
+RANK() OVER(PARTITION BY department_id
+ORDER BY SUM(salary) DESC)
+AS rank_of_job_per_dep,
+RANK() OVER(ORDER BY SUM(salary) DESC)
+AS rank_of_sumsalary
+FROM employees
+GROUP BY department_id, job_id
+ORDER BY department_id;

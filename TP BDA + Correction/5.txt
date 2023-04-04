@@ -1,0 +1,4 @@
+SELECT department_id,job_id,manager_id,SUM(salary)
+FROM employees
+GROUP BY department_id,
+CUBE(job_id , manager_id);

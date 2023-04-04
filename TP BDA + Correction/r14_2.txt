@@ -1,0 +1,15 @@
+with paire as
+(
+select t.employee_id,t.first_name 
+from
+	(
+	select employee_id,first_name, mod(employee_id,2) mo 
+	from employees order by employee_id asc
+	)t 
+where t.mo=0
+)
+select paire.*, (select employee_id from employees 
+                 where employee_id=paire.employee_id+1) id ,
+                (select first_name from employees 
+                 where employee_id=paire.employee_id+1) name 
+from paire;

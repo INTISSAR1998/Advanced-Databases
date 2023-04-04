@@ -1,0 +1,16 @@
+SELECT employee_id, job_id, commission_pct,
+ROW_NUMBER() OVER(ORDER BY commission_pct DESC NULLS LAST)
+AS rnum
+FROM employees;
+
+SELECT employee_id, job_id, department_id, salary,
+ROW_NUMBER() OVER(partition by department_id ORDER BY salary DESC)
+AS rnum
+FROM employees;
+
+
+SELECT employee_id, job_id, department_id, salary,
+ROW_NUMBER() OVER(partition by department_id ORDER BY salary DESC) as rnum1,
+ROW_NUMBER() OVER(ORDER BY salary DESC)
+AS rnum2
+FROM employees;

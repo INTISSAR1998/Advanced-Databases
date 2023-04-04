@@ -1,0 +1,97 @@
+Création de la table département
+================================
+DROP table dep;
+create table dep
+(
+id_d number primary key,
+nom_d varchar2(20),
+nbe number default 0);
+);
+-------------------------------
+
+Création de la table employés
+=============================
+drop table emp;
+create table emp
+(
+id_e number primary key,
+nom_e varchar2(20),
+id_d number references dep);
+);
+-------------------------------
+
+Création d'un déclencheur pour la gestion du nombre d'employés par département
+==============================================================================
+
+create or replace trigger gest_nbe_dep
+after insert or delete or update
+on emp
+for each row
+begin
+if(inserting) then
+update dep set nbe=nbe+1 where id_d=:new.id_d;
+elsif (deleting) then
+update dep set nbe=nbe-1 where id_d=:old.id_d;
+elsif (updating) then
+update dep set nbe=nbe-1 where id_d=:old.id_d;
+update dep set nbe=nbe+1 where id_d=:new.id_d;
+end if;
+end;
+/
+
+
+Création d'un déclencheur pour la gestion des numéros des employés
+==================================================================
+
+create or replace trigger nbr_auto_increment
+before insert 
+on emp
+for each row 
+declare
+nb integer;
+nb_emp integer;
+  begin
+	select count(*) into nb from emp;
+ 	if(nb>0) then
+	  select max(id_e) into nb from emp ;
+	   :new.id_e:=nb+1;
+	else
+	   :new.id_e:=1;
+	end if;
+    end;
+
+insert into emp values (100,'A');
+insert into emp values (100,'B');
+
+select * from emp;
+
+
+Création d'un déclencheur pour l'historique des connexions
+==========================================================
+
+conn sys/as sysdba
+
+drop table logon_table;
+--------------------------------------------------------------
+create table logon_table
+(
+        user_connect    varchar2(30),
+        date_connect    varchar2(30)
+);
+--------------------------------------------------------------
+create or replace trigger trigger_logon_database
+  after logon on database
+begin
+  insert into logon_table (user_connect,date_connect) 
+      values(user,to_char(sysdate,'DD-MON-YYYY HH24:MI:SS'));
+  commit;
+end;
+/
+--------------------------------------------------------------
+
+
+
+
+
+
+

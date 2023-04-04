@@ -1,0 +1,31 @@
+select r1.employee_id, r1.first_name, r2.employee_id, r2.first_name
+from
+(select employee_id, first_name
+from employees
+where mod(employee_id,2) = 0) r1 LEFT OUTER JOIN
+(select employee_id, first_name
+from employees
+where mod(employee_id,2) = 1) r2
+on r1.employee_id + 1 =r2.employee_id;
+
+====================================================================================
+
+select r1.employee_id, r1.first_name, r2.employee_id, r2.first_name
+from
+(select employee_id, first_name
+from employees
+where mod(employee_id,2) = 0) r1,
+(select employee_id, first_name
+from employees
+where mod(employee_id,2) = 1) r2
+where r1.employee_id + 1 =r2.employee_id(+);
+
+===================================================================================
+
+select r1.employee_id, r1.first_name, r2.employee_id, r2.first_name
+from employees r1, employees r2
+where mod(r1.employee_id,2) = 0
+and r1.employee_id+1 = r2.employee_id(+);
+
+
+

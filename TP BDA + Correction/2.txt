@@ -1,0 +1,24 @@
+select e.department_id, count(*) as nb_emp
+from employees e 
+group by e.department_id;
+====================================================================
+select d.department_id, department_name, nvl(nb_emp,0)
+from departments d,
+(select e.department_id, count(*) as nb_emp
+from employees e 
+group by e.department_id) e
+where d.department_id = e.department_id(+);
+====================================================================
+select d.department_id, department_name, nvl(nb_emp,0)
+from departments d left outer join
+(select e.department_id, count(*) as nb_emp
+from employees e 
+group by e.department_id) e
+on d.department_id = e.department_id;
+====================================================================
+select d.department_id, department_name, nvl(nb_emp,0) as nb_emp
+from departments d left outer join
+(select e.department_id, count(*) as nb_emp
+from employees e 
+group by e.department_id) e
+on d.department_id = e.department_id;

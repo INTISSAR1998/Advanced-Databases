@@ -1,0 +1,28 @@
+SELECT department_id, department_name
+FROM departments d
+WHERE NOT EXISTS ( SELECT 'X'
+FROM employees e
+WHERE d.department_id = e.department_id);
+
+
+SELECT department_id, department_name
+FROM departments d
+WHERE department_id NOT in ( SELECT distinct department_id
+                             FROM employees
+                             where department_id is not null); 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

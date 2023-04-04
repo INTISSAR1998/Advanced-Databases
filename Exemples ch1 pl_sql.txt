@@ -1,0 +1,578 @@
+
+
+DECLARE
+v1 integer := 100;
+v2 varchar(5) :=’A’;
+BEGIN
+DECLARE
+v1 integer;
+v3 varchar2(10):=v2||’1’;
+v4 varchar2(10):=’B’;
+BEGIN
+dbms_output.put_line(’v1(1) =’ || v1 || chr(10) ||
+’v2(1) =’ || v2 || chr(10) || ’v3(1) =’ || v3);
+v1 := 200;
+v2 := 'B';
+dbms_output.put_line(’v1(10) =’ || v1);
+dbms_output.put_line(’v2(10) =’ || v2);
+END;
+dbms_output.put_line(’v1(2) =’ || v1 || chr(10) || ’v2(2) =’ || v2);
+--dbms_output.put_line(’v3(2) =’ || v3);
+dbms_output.put_line(’v1(10) =’ || v1);
+dbms_output.put_line(’v2(10) =’ || v2);
+END;
+/
+
+=======================================================================
+
+
+declare
+
+V1 employees.employee_id%type;
+
+V2 employees%rowtype;
+
+desc employees
+
+employee_id
+first_name
+department_id
+
+V2.employee_id
+V2.first_name
+V2.department_id
+
+
+recd_emp.first_name
+recd_emp.salary
+recd_emp.job_id
+
+=======================================================================
+
+DECLARE
+v1 integer := 1;
+BEGIN
+CASE v1
+WHEN 1 THEN
+dbms_output.put_line(’A’);
+WHEN 2 THEN
+dbms_output.put_line(’B’);
+WHEN 3 THEN
+dbms_output.put_line(’C’);
+ELSE
+dbms_output.put_line(’X’);
+END CASE;
+END;
+/
+
+=======================================================================
+
+DECLARE
+v1 integer := 1;
+BEGIN
+CASE
+WHEN v1<5 THEN
+dbms_output.put_line(’A’);
+WHEN v1<10 THEN
+dbms_output.put_line(’B’);
+WHEN v1<15 THEN
+dbms_output.put_line(’C’);
+ELSE dbms_output.put_line(’X’);
+END CASE;
+END;
+/
+
+=======================================================================
+
+DECLARE
+v1 integer :=1;
+BEGIN
+WHILE v1 < 10 LOOP
+dbms_output.put_line(v1);
+v1 := v1+1;
+END LOOP;
+END;
+/
+
+=======================================================================
+
+DECLARE
+v1 integer :=1;
+BEGIN
+LOOP
+dbms_output.put_line(v1);
+EXIT WHEN v1 =10;
+v1 := v1+1;
+END LOOP;
+END;
+/
+
+=======================================================================
+
+DECLARE
+v1 integer :=1;
+BEGIN
+LOOP
+dbms_output.put_line(v1);
+v1 := v1+1;
+EXIT WHEN v1 =10;
+END LOOP;
+END;
+/
+
+=======================================================================
+
+DECLARE
+v1 integer :=1;
+BEGIN
+FOR v1 IN 1..10 LOOP
+dbms_output.put_line(v1);
+END LOOP;
+END;
+/
+
+=======================================================================
+
+DECLARE
+v1 integer :=1;
+BEGIN
+FOR v1 IN REVERSE 1..10 LOOP
+dbms_output.put_line(v1);
+END LOOP;
+END;
+/
+
+=======================================================================
+
+DECLARE
+v1 integer :=1;
+BEGIN
+FOR v1 IN REVERSE  10..1 LOOP
+dbms_output.put_line(v1);
+END LOOP;
+END;
+/
+
+=======================================================================
+
+DECLARE
+v1 integer :=1;
+BEGIN
+FOR v1 IN 10..1 LOOP
+dbms_output.put_line(v1);
+END LOOP;
+END;
+/
+
+=======================================================================
+
+DECLARE
+BEGIN
+FOR v1 IN 1..10 LOOP
+dbms_output.put_line(v1);
+END LOOP;
+END;
+/
+
+=======================================================================
+
+BEGIN
+FOR v1 IN 1..10 LOOP
+dbms_output.put_line(v1);
+EXIT WHEN v1 =6;
+END LOOP;
+END;
+/
+
+=======================================================================
+
+DECLARE
+salaire_moy employees.salary%type;
+BEGIN
+Select avg(salary) into salaire_moy From employees where department_id=10;
+dbms_output.put_line(’Le salaire moyen des employes du departement 10 est : ’ ||
+to_char(salaire_moy ,’99999.99’));
+END ;
+/
+
+=======================================================================
+
+DECLARE
+v_emp employees%ROWTYPE;
+BEGIN
+Select * into v_emp From employees where employee_id = 124;
+dbms_output.put_line(’Nom employe :’ || v_emp.last_name || chr(10)||
+’Fonction : ’ || v_emp.job_id || chr(10)|| ’Departement : ’||
+v_emp.department_id ||chr(10)|| ’Date recrutement : ’||
+to_char(v_emp.hire_date, ’dd/mm/yyyy’) || chr(10) || ’Salaire : ’ ||
+v_emp.salary );
+END;
+/
+
+======================================================================
+
+DECLARE
+
+type type_emp is record
+(
+id employees.employee_id%TYPE,
+nom employees.first_name%TYPE,
+sal employees.salary%TYPE
+);
+
+v_emp type_emp;
+
+BEGIN
+
+Select null, first_name, salary  into v_emp 
+From employees where employee_id = 124;
+
+dbms_output.put_line(’Nom employe :’ || v_emp.nom || chr(10)||
+                     ’Salaire : ’ || v_emp.sal );
+END;
+/
+
+
+
+
+
+
+
+
+	Donner un bloc pl/sql permettant d'afficher le nombre d'employés d'un 
+	
+	departement donné (department_id = 10)
+
+
+
+
+
+
+
+
+declare
+nbe number;
+begin
+select count(*) into nbe from employees
+where department_id = 10;
+dbms_output.put_line('Le nombre d''employes du department 10 est : ' || nbe);
+end;
+/
+
+propmt donner le num dept
+declare
+nbe number;
+numd employees.department_id%type := &x;
+begin
+select count(*) into nbe from employees
+where department_id = numd;
+dbms_output.put_line('Le nombre d''employes du department ' || 
+                      numd || ' est : ' || nbe);
+end;
+/
+
+
+========================================================================================
+		('Le department '|| nomd ||' de numero '|| numd);
+		('Contient :' || nbe);
+========================================================================================
+
+
+
+declare
+nbe number;
+nbd number;
+nomd departments.department_name%type;
+numd employees.department_id%type := &x;
+begin
+select count(*) into nbd from departments
+where department_id = numd;
+
+if (nbd = 0) then
+dbms_output.put_line('Erreur de departement');
+else
+select department_name into nomd from departments
+where department_id = numd;
+
+select count(*) into nbe from employees
+where department_id = numd;
+
+dbms_output.put_line('Le department '|| nomd ||' de numero '|| numd);
+if (nbe > 1 ) then
+dbms_output.put_line('Contient :' || nbe || ' employes');
+else
+dbms_output.put_line('Contient :' || nbe || ' employe');
+end if;
+end if;
+end;
+/
+
+==============================================================================
+
+declare
+emp varchar2(20);
+nbe number;
+nbd number;
+nomd departments.department_name%type;
+numd employees.department_id%type := &x;
+begin
+select count(*) into nbd from departments
+where department_id = numd;
+
+if (nbd = 0) then
+dbms_output.put_line('Erreur de departement');
+else
+select department_name into nomd from departments
+where department_id = numd;
+
+select count(*) into nbe from employees
+where department_id = numd;
+
+dbms_output.put_line('Le department '|| nomd ||' de numero '|| numd);
+if (nbe > 1 ) then
+emp := ' employes';
+else
+emp := ' employe';
+end if;
+
+dbms_output.put_line('Contient :' || nbe || emp);
+
+end if;
+end;
+/
+
+
+
+=======================================================================
+
+declare
+nbe number;
+numd departments.department_id%type :=&x;
+nomd departments.department_name%type;
+
+begin
+select department_name into nomd from departments
+where department_id = numd;
+
+select count(*) into nbe from employees 
+where department_id = numd;
+
+dbms_output.put_line ('Le department '|| nomd ||' de numero '|| numd);
+dbms_output.put_line ('Contient :' || nbe);
+end;
+/
+
+=======================================================================
+
+declare
+nbe number;
+numd departments.department_id%type :=&x;
+nomd departments.department_name%type;
+
+begin
+select department_name into nomd from departments
+where department_id = numd;
+
+select count(*) into nbe from employees 
+where department_id = numd;
+
+dbms_output.put_line ('Le department '|| nomd ||' de numero '|| numd);
+dbms_output.put_line ('Contient :' || nbe);
+end;
+/
+
+=======================================================================
+
+
+declare
+nbd number;
+nbe number;
+ch varchar2(10);
+numd departments.department_id%type :=&x;
+nomd departments.department_name%type;
+
+begin
+select count(*) into nbd from departments
+where department_id = numd;
+
+if (nbd = 0) then
+dbms_output.put_line ('Erreur de departement');
+else
+select department_name into nomd from departments
+where department_id = numd;
+
+select count(*) into nbe from employees 
+where department_id = numd;
+
+dbms_output.put_line ('Le department '|| nomd ||' de numero '|| numd);
+if nbe > 1 then
+ch := ' employes';
+else
+ch := ' employe';
+end if;
+dbms_output.put_line ('Contient :' || nbe || ch);
+
+end if;
+end;
+/
+
+=======================================================================
+
+declare
+nbd number;
+nbe number;
+numd departments.department_id%type :=&x;
+nomd departments.department_name%type;
+
+begin
+select count(*) into nbd from departments
+where department_id = numd;
+
+if (nbd = 0) then
+dbms_output.put_line ('Erreur de departement');
+else
+select department_name into nomd from departments
+where department_id = numd;
+
+select count(*) into nbe from employees 
+where department_id = numd;
+
+dbms_output.put_line ('Le department '|| nomd ||' de numero '|| numd);
+if nbe > 1 then
+dbms_output.put_line ('Contient : ' || nbe ||' employes');
+else
+dbms_output.put_line ('Contient : ' || nbe ||' employe');
+end if;
+end if;
+end;
+/
+
+=======================================================================
+
+declare
+emp varchar2(10);
+nbd number;
+nbe number;
+numd departments.department_id%type :=&x;
+nomd departments.department_name%type;
+
+begin
+select count(*) into nbd from departments
+where department_id = numd;
+
+if (nbd = 0) then
+dbms_output.put_line ('Erreur de departement');
+else
+select department_name into nomd from departments
+where department_id = numd;
+
+select count(*) into nbe from employees 
+where department_id = numd;
+
+dbms_output.put_line ('Le department '|| nomd ||' de numero '|| numd);
+if nbe > 1 then
+emp := ' employes';
+else
+emp := ' employe';
+end if;
+dbms_output.put_line ('Contient : ' || nbe || emp );
+
+end if;
+end;
+/
+
+declare
+ch varchar2(10);
+nbe number;
+begin
+select nbe, case when nbe>1 then ' employes' else ' employe' end case into nbe, ch
+from (select count(*) nbe from employees where department_id = &x);
+dbms_output.put_line ('Contient : ' || nbe || ch );
+end;
+/
+
+
+=======================================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

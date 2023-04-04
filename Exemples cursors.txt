@@ -1,0 +1,172 @@
+la str d'une table
+
+nom_tab (att1, att2, ...,attn)
+
+user_tab_columns
+>table_name
+>column_name
+
+user_tables
+>table_name
+
+declare
+nomt user_tab_columns.table_name%type := upper('&montable');
+
+cursor c is select column_name from user_tab_columns 
+            where table_name = nomt;
+ch varchar2(500) :=nomt ||' (';
+nbt number;
+begin
+select count(*) into nbt from user_tables where table_name = nomt;
+if nbt = 0 then
+dbms_output.put_line('La table n''existe pas');
+else
+for vc in c loop
+if c%rowcount = 1 then
+ch := ch || vc.column_name;
+else
+ch := ch ||','|| vc.column_name;
+end if;
+end loop;
+ch :=ch||')';
+dbms_output.put_line(ch);
+end if;
+end;
+/
+
+=====================================================================
+create or replace function verify_tab (nomt user_tab_columns.table_name%type)
+return number
+is
+nbt number;
+begin
+select count(*) into nbt from user_tables where table_name = upper(nomt);
+return nbt;
+end;
+/
+
+=====================================================================
+
+create or replace procedure str_tab (nomt user_tab_columns.table_name%type)
+is
+
+cursor c is select column_name from user_tab_columns 
+            where table_name = upper(nomt);
+
+ch varchar2(500) :=nomt ||' (';
+
+begin
+
+if verify_tab(nomt) = 0 then
+dbms_output.put_line('La table n''existe pas');
+else
+for vc in c loop
+if c%rowcount = 1 then
+ch := ch || vc.column_name;
+else
+ch := ch ||','|| vc.column_name;
+end if;
+end loop;
+ch :=ch||')';
+dbms_output.put_line(ch);
+end if;
+end;
+/
+
+=====================================================================
+
+create or replace procedure str_all_tabs 
+is
+cursor c is select table_name from user_tables;
+
+begin
+for vc in c loop
+str_tab(vc.table_name);
+end loop;
+end;
+/
+
+======================================================================
+1/
+alter table nom_table drop constraint nom_cont;
+
+user_constraints
+>constraint_name
+>table_name
+>constraint_type = 'R'
+
+
+2/
+drop table nom_table;
+
+drop view nom_view;
+
+tab
+>tname
+>tab_type
+
+
+create or replace procedure detruire
+is
+cursor cc is select 'alter table '||table_name||' drop constraint '||constraint_name req1
+             from user_constraints where constraint_type = 'R';
+
+cursor ct is select tname, tabtype
+             from tab;
+req2 varchar2(100);
+begin
+for vcc in cc loop
+execute immediate vcc.req1;
+end loop;
+
+for vct in ct loop
+req2 :='drop '||vct.tabtype||' '||vct.tname;
+execute immediate req2;
+end loop;
+end;
+/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

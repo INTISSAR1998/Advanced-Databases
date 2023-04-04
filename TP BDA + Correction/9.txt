@@ -1,0 +1,13 @@
+select employee_id, first_name
+from employees e
+where not exists (select *
+              from employees m 
+              where manager_id is not null
+              and e.employee_id = m.manager_id);
+=======================================================
+select employee_id, first_name
+from employees e
+where employee_id not in (select distinct manager_id 
+                          from employees 
+                          where manager_id is not null);
+

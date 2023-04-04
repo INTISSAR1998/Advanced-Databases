@@ -1,0 +1,303 @@
+---------------------------------------------------------------------------
+sans exception (select into)
+---------------------------------------------------------------------------
+set serveroutput on
+accept num_dept prompt 'Donner le num du departement : '
+declare
+nd integer :=&num_dept;
+emp employees%rowtype;
+begin
+select * into emp from employees where department_id = nd;
+dbms_output.put_line(emp.employee_id);
+end;
+/
+---------------------------------------------------------------------------
+exception prédéfinie
+---------------------------------------------------------------------------
+set serveroutput on
+accept num_dept prompt 'Donner le num du departement : '
+declare
+nd integer :=&num_dept;
+emp employees%rowtype;
+begin
+select * into emp from employees where department_id = nd;
+dbms_output.put_line(emp.employee_id);
+
+EXCEPTION
+WHEN TOO_MANY_ROWS THEN
+DBMS_OUTPUT.PUT_LINE ('La requete revoie plusieurs lignes, utilisez un
+curseur');
+WHEN NO_DATA_FOUND THEN
+DBMS_OUTPUT.PUT_LINE ('Aucun employee dans ce departement');
+
+end;
+/
+---------------------------------------------------------------------------
+PRAGMA EXCEPTION_INIT
+---------------------------------------------------------------------------
+set serveroutput on
+accept num_dept prompt 'Donner le num du departement : '
+declare
+d0 exception;
+d2 exception;
+PRAGMA EXCEPTION_INIT(d0,+100);
+PRAGMA EXCEPTION_INIT(d2,-1422);
+x integer;
+nd integer :=&num_dept;
+emp employees%rowtype;
+begin
+
+select * into emp from employees where department_id = nd;
+dbms_output.put_line(emp.employee_id);
+
+EXCEPTION
+WHEN d2 THEN
+DBMS_OUTPUT.PUT_LINE ('La requete revoie plusieurs lignes, utilisez un
+curseur');
+WHEN d0 THEN
+DBMS_OUTPUT.PUT_LINE ('Aucun employee dans ce departement');
+
+end;
+/
+---------------------------------------------------------------------------
+exception définie
+---------------------------------------------------------------------------
+set serveroutput on
+accept num_dept prompt 'Donner le num du departement : '
+declare
+d0 exception;
+d2 exception;
+x integer;
+nd integer :=&num_dept;
+emp employees%rowtype;
+begin
+select count(*) into x from employees where department_id = nd;
+if x=0 then
+raise d0;
+elsif x >1 then
+raise d2;
+end if;
+
+select * into emp from employees where department_id = nd;
+dbms_output.put_line(emp.employee_id);
+
+EXCEPTION
+WHEN d2 THEN
+DBMS_OUTPUT.PUT_LINE ('La requete revoie plusieurs lignes, utilisez un
+curseur');
+WHEN d0 THEN
+DBMS_OUTPUT.PUT_LINE ('Aucun employee dans ce departement');
+
+end;
+/
+---------------------------------------------------------------------------
+raise_application_error (begin)
+---------------------------------------------------------------------------
+set serveroutput on
+accept num_dept prompt 'Donner le num du departement : '
+declare
+x integer;
+nd integer :=&num_dept;
+emp employees%rowtype;
+
+begin
+select count(*) into x from employees where department_id = nd;
+if x=0 then
+raise_application_error(-20100,'Aucun employee dans ce departement');
+elsif x >1 then
+raise_application_error(-20300,'La requete revoie plusieurs lignes, utilisez un
+curseur');
+end if;
+
+select * into emp from employees where department_id = nd;
+dbms_output.put_line(emp.employee_id);
+
+end;
+/
+---------------------------------------------------------------------------
+raise_application_error (EXCEPTION 1)
+---------------------------------------------------------------------------
+set serveroutput on
+accept num_dept prompt 'Donner le num du departement : '
+declare
+x integer;
+nd integer :=&num_dept;
+emp employees%rowtype;
+begin
+
+select * into emp from employees where department_id = nd;
+dbms_output.put_line(emp.employee_id);
+
+EXCEPTION
+WHEN no_data_found THEN
+raise_application_error(-20100,'Aucun employee dans ce departement');
+WHEN too_many_rows THEN
+raise_application_error(-20300,'La requete revoie plusieurs lignes, utilisez un curseur');
+
+end;
+/
+---------------------------------------------------------------------------
+raise_application_error (EXCEPTION 2)
+---------------------------------------------------------------------------
+set serveroutput on
+accept num_dept prompt 'Donner le num du departement : '
+declare
+d0 exception;
+d2 exception;
+PRAGMA EXCEPTION_INIT(d0,+100);
+PRAGMA EXCEPTION_INIT(d2,-1422);
+x integer;
+nd integer :=&num_dept;
+emp employees%rowtype;
+begin
+
+select * into emp from employees where department_id = nd;
+dbms_output.put_line(emp.employee_id);
+
+EXCEPTION
+WHEN d0 THEN
+raise_application_error(-20100,'Aucun employee dans ce departement');
+WHEN d2 THEN
+raise_application_error(-20300,'La requete revoie plusieurs lignes, utilisez un curseur');
+
+end;
+/
+---------------------------------------------------------------------------
+raise_application_error (EXCEPTION 3)
+---------------------------------------------------------------------------
+set serveroutput on
+accept num_dept prompt 'Donner le num du departement : '
+declare
+d0 exception;
+d2 exception;
+x integer;
+nd integer :=&num_dept;
+emp employees%rowtype;
+begin
+select count(*) into x from employees where department_id = nd;
+if x=0 then
+raise d0;
+elsif x >1 then
+raise d2;
+end if;
+
+select * into emp from employees where department_id = nd;
+dbms_output.put_line(emp.employee_id);
+
+EXCEPTION
+WHEN d0 THEN
+raise_application_error(-20100,'Aucun employee dans ce departement');
+WHEN d2 THEN
+raise_application_error(-20300,'La requete revoie plusieurs lignes, utilisez un curseur');
+
+end;
+/
+---------------------------------------------------------------------------
+WHEN OTHERS
+---------------------------------------------------------------------------
+set serveroutput on
+accept num_dept prompt 'Donner le num du departement : '
+declare
+nd integer :=&num_dept;
+emp employees%rowtype;
+begin
+select * into emp from employees where department_id = nd;
+dbms_output.put_line(emp.employee_id);
+
+EXCEPTION
+WHEN OTHERS THEN
+DBMS_OUTPUT.PUT_LINE('code de l"erreur : '||SQLCODE);
+DBMS_OUTPUT.PUT_LINE('message de l"erreur : '||SQLERRM);
+end;
+/
+-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+
+---------------------------------------------------------------------------
+sans exception (division par 0)
+---------------------------------------------------------------------------
+set serveroutput on
+accept n1 prompt 'Donner un entier : '
+accept n2 prompt 'Donner un entier : '
+declare
+x integer :=&n1;
+y integer :=&n2;
+begin
+dbms_output.put_line(x/y);
+end;
+/
+---------------------------------------------------------------------------
+WHEN OTHERS
+---------------------------------------------------------------------------
+set serveroutput on
+accept n1 prompt 'Donner un entier : '
+accept n2 prompt 'Donner un entier : '
+declare
+x integer :=&n1;
+y integer :=&n2;
+begin
+dbms_output.put_line(x/y);
+exception
+WHEN OTHERS THEN
+ROLLBACK;
+DBMS_OUTPUT.PUT_LINE('code de l"erreur : '||SQLCODE);
+DBMS_OUTPUT.PUT_LINE('message de l"erreur : '||SQLERRM);
+end;
+/
+---------------------------------------------------------------------------
+---------------------------------------------------------------------------
+set serveroutput on
+accept n1 prompt 'Donner un entier : '
+accept n2 prompt 'Donner un entier : '
+declare
+x integer :=&n1;
+y integer :=&n2;
+
+begin
+dbms_output.put_line(x/y);
+
+EXCEPTION
+WHEN ZERO_DIVIDE THEN
+DBMS_OUTPUT.PUT_LINE('ERREUR: Division par 0');
+END;
+/
+---------------------------------------------------------------------------
+---------------------------------------------------------------------------
+set serveroutput on
+accept n1 prompt 'Donner un entier : '
+accept n2 prompt 'Donner un entier : '
+declare
+x integer :=&n1;
+y integer :=&n2;
+division_zero EXCEPTION;
+PRAGMA EXCEPTION_INIT(division_zero,-01476);
+
+BEGIN
+dbms_output.put_line(x/y);
+
+EXCEPTION
+WHEN division_zero THEN
+DBMS_OUTPUT.PUT_LINE('ERREUR: Division par 0');
+END;
+/
+---------------------------------------------------------------------------
+---------------------------------------------------------------------------
+set serveroutput on
+accept n1 prompt 'Donner un entier : '
+accept n2 prompt 'Donner un entier : '
+declare
+x integer :=&n1;
+y integer :=&n2;
+division_zero EXCEPTION;
+
+BEGIN
+if y=0 then 
+raise division_zero;
+end if;
+dbms_output.put_line(x/y);
+
+EXCEPTION
+WHEN division_zero THEN
+DBMS_OUTPUT.PUT_LINE('ERREUR: Division par 0');
+END;
+/
+-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
